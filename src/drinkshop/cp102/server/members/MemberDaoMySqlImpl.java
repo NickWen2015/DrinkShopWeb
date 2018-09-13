@@ -138,7 +138,7 @@ public class MemberDaoMySqlImpl implements MemberDao {
 
 	@Override
 	public Member findById(int member_id) {
-		String sql = "SELECT member_account, member_password, member_name, member_birthday, member_sex, member_mobile, member_email,member_address FROM member WHERE member_id = ?;";
+		String sql = "SELECT member_account, member_password, member_name, member_birthday, member_sex, member_mobile, member_email, member_address, member_status FROM member WHERE member_id = ?;";
 		Connection conn = null;
 		PreparedStatement ps = null;
 		Member member = null;
@@ -152,7 +152,7 @@ public class MemberDaoMySqlImpl implements MemberDao {
 				String member_account = rs.getString(1);
 				String member_password = rs.getString(2);
 				String member_name = rs.getString(3);
-				String member_birthday = Helper.getFmtDateTimeToStr(rs.getDate(4));
+				String member_birthday = Helper.getFmtdDateToStr(rs.getDate(4));
 				String member_sex = rs.getString(5);
 				String member_mobile = rs.getString(6);
 				String member_email = rs.getString(7);
@@ -178,6 +178,50 @@ public class MemberDaoMySqlImpl implements MemberDao {
 		return member;
 	}
 
+	@Override
+	public Member findMemberByAccountAndPassword(String account, String password) {
+		String sql = "SELECT member_id, member_account, member_password, member_name, member_birthday, member_sex, member_mobile, member_email, member_address, member_status FROM member WHERE member_account = ? AND member_password = ?;";
+		Connection conn = null;
+		PreparedStatement ps = null;
+		Member member = null;
+		try {
+			conn = DriverManager.getConnection(Common.URL, Common.USER,
+					Common.PASSWORD);
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, account);
+			ps.setString(2, password);
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				String member_id = rs.getString(1);
+				String member_account = rs.getString(2);
+				String member_password = rs.getString(3);
+				String member_name = rs.getString(4);
+				String member_birthday = Helper.getFmtDateTimeToStr(rs.getDate(5));
+				String member_sex = rs.getString(6);
+				String member_mobile = rs.getString(7);
+				String member_email = rs.getString(8);
+				String member_address = rs.getString(9);
+				String member_status = rs.getString(10);
+				
+				member = new Member(Integer.parseInt(member_id), member_account, member_password, member_name, member_birthday, member_sex, member_mobile, member_email, member_address, member_status);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (ps != null) {
+					ps.close();
+				}
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return member;
+	}
+	
 	@Override
 	public List<Member> getAll() {
 		String sql = "SELECT member_id, member_account, member_password, member_name, member_birthday, member_sex, member_mobile, member_email, member_address, member_status FROM member;";
@@ -215,5 +259,38 @@ public class MemberDaoMySqlImpl implements MemberDao {
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public boolean isMemberValid(String member_account, String member_password) {
+		boolean isAvalible = false;
+		String sql = "SELECT member_account, member_password, member_name, member_birthday, member_sex, member_mobile, member_email,member_address FROM member WHERE member_account = ? AND member_password = ?;";
+		Connection conn = null;
+		PreparedStatement ps = null;
+		try {
+			conn = DriverManager.getConnection(Common.URL, Common.USER,
+					Common.PASSWORD);
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, member_account);
+			ps.setString(2, member_password);
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				isAvalible = true;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (ps != null) {
+					ps.close();
+				}
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return isAvalible;
 	}
 }

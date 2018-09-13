@@ -8,4 +8,6 @@ public interface MemberDao {
 	int delete(int member_id);
 	Member findById(int member_id);
 	List<Member> getAll();
+	boolean isMemberValid(String member_account, String member_password);
+	Member findMemberByAccountAndPassword(String member_account, String member_password);
 }

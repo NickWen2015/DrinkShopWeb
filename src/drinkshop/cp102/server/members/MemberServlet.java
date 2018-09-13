@@ -50,6 +50,20 @@ public class MemberServlet extends HttpServlet {
 		if (action.equals("getAll")) {
 			List<Member> newsList = memberDao.getAll();
 			writeText(response, gson.toJson(newsList));
+		}else if (action.equals("isUserValid")) {
+			String member_account = jsonObject.get("name").getAsString();
+			String member_password = jsonObject.get("password").getAsString();
+			boolean isMemberValid = memberDao.isMemberValid(member_account, member_password);
+			writeText(response, String.valueOf(isMemberValid));
+		}else if (action.equals("findMemberByAccountAndPassword")) {
+			String member_account = jsonObject.get("name").getAsString();
+			String member_password = jsonObject.get("password").getAsString();
+			Member member = memberDao.findMemberByAccountAndPassword(member_account, member_password);
+			writeText(response, gson.toJson(member));
+		}else if (action.equals("findById")) {
+			String member_id = jsonObject.get("member_id").getAsString();
+			Member member = memberDao.findById(Integer.parseInt(member_id));
+			writeText(response, gson.toJson(member));
 		}
 	}
 
