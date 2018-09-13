@@ -9,9 +9,9 @@ public class LogHelper {
 
 	    public LogHelper() {super();}
 
-	    public static void showInput(String jsonIn) {
+	    public static void showInput(StringBuilder jsonIn) {
 	        if (condition)
-	        	System.out.println("input: " + jsonIn);
+	        	System.out.println("input: " + String.valueOf(jsonIn));
 	    }
 
 	    public static void showOutput(String outText) {

@@ -11,7 +11,9 @@ public interface ProductDao {
 
 	Product findById(int id);
 
-	List<Product> getAll();
-
 	byte[] getImage(int id);
+
+	List<Product> getAllProduct();
+
+	List<Product> getProductDetail(int searchID);
 }

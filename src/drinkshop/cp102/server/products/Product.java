@@ -1,69 +1,62 @@
 package drinkshop.cp102.server.products;
 
+/**
+ * 商品
+ * @author mrosstro
+ * @date 2018/8/29
+ * */
 public class Product {
+    private long id;
+    private String Category;
+    private String Name;
+    private int MPrice;
+    private int LPrice;
 
-	private int id;
-	private String name;
-	private String phoneNo;
-	private String address;
-	private double latitude;
-	private double longitude;
+    public Product(long id, String category, String name, int MPrice, int LPrice) {
+        this.id = id;
+        Category = category;
+        Name = name;
+        this.MPrice = MPrice;
+        this.LPrice = LPrice;
+    }
 
-	public Product(int id, String name, String phoneNo, String address,
-			double latitude, double longitude) {
-		this.id = id;
-		this.name = name;
-		this.phoneNo = phoneNo;
-		this.address = address;
-		this.latitude = latitude;
-		this.longitude = longitude;
-	}
+    public long getId() {
+        return id;
+    }
 
-	public int getId() {
-		return id;
-	}
+    public void setId(long id) {
+        this.id = id;
+    }
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    public String getCategory() {
+        return Category;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public void setCategory(String category) {
+        Category = category;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public String getName() {
+        return Name;
+    }
 
-	public String getPhoneNo() {
-		return phoneNo;
-	}
+    public void setName(String name) {
+        Name = name;
+    }
 
-	public void setPhoneNo(String phoneNo) {
-		this.phoneNo = phoneNo;
-	}
+    public int getMPrice() {
+        return MPrice;
+    }
 
-	public String getAddress() {
-		return address;
-	}
+    public void setMPrice(int MPrice) {
+        this.MPrice = MPrice;
+    }
 
-	public void setAddress(String address) {
-		this.address = address;
-	}
+    public int getLPrice() {
+        return LPrice;
+    }
 
-	public double getLatitude() {
-		return latitude;
-	}
-
-	public void setLatitude(double latitude) {
-		this.latitude = latitude;
-	}
-
-	public double getLongitude() {
-		return longitude;
-	}
-
-	public void setLongitude(double longitude) {
-		this.longitude = longitude;
-	}
+    public void setLPrice(int LPrice) {
+        this.LPrice = LPrice;
+    }
 }
