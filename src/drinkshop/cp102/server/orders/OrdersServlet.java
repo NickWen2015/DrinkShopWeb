@@ -17,10 +17,12 @@ import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
 import drinkshop.cp102.server.main.LogHelper;
+import drinkshop.cp102.server.members.Member;
+import drinkshop.cp102.server.members.MemberDaoMySqlImpl;
 import drinkshop.cp102.server.products.Product;
 
 
-
+@SuppressWarnings("serial")
 @WebServlet("/OrdersServlet")
 public class OrdersServlet extends HttpServlet {
 	private final static String CONTENT_TYPE = "text/html; charset=utf-8";
@@ -46,7 +48,6 @@ public class OrdersServlet extends HttpServlet {
 		List<Product> products = null;
 		switch (action) {
 		case "orderInsert":
-			OrderDao orderDAO = new OrderDaoMySqlImpl();
 			int store_id = jsonObject.get("store_id").getAsInt();
 			int member_id = jsonObject.get("member_id").getAsInt();
 			int coupon_id = jsonObject.get("coupon_id").getAsInt();
@@ -55,10 +56,10 @@ public class OrdersServlet extends HttpServlet {
 			Type listType = new TypeToken<List<Order>>() {
 			}.getType();
 			List<Order> cart = gson.fromJson(shoppingCartList, listType);
-			int orderId = orderDAO.insert(store_id, member_id, coupon_id, order_type, cart);
+			int orderId = orderDao.insert(store_id, member_id, coupon_id, order_type, cart);
 			Order order = null;
 			if (orderId != -1) {
-				order = orderDAO.findById(orderId);
+				order = orderDao.findById(orderId);
 			}
 			writeText(response, gson.toJson(orderId));
 			break;
@@ -71,6 +72,11 @@ public class OrdersServlet extends HttpServlet {
 	}
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		if (orderDao == null) {
+			orderDao = new OrderDaoMySqlImpl();
+		}
+		List<Order> orderList = orderDao.findOrderByMemberId(1);
+		writeText(response, new Gson().toJson(orderList));
 	}
 	
 	private void writeText(HttpServletResponse response, String outText) throws IOException {

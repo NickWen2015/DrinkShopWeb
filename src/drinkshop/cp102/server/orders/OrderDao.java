@@ -10,5 +10,7 @@ public interface OrderDao {
 	int delete(int id);
 
 	Order findById(int id);
-
+	
+	//撈訂單歷史紀錄 
+	List<Order> findOrderByMemberId(int member_id);
 }
