@@ -64,6 +64,19 @@ public class MemberServlet extends HttpServlet {
 			String member_id = jsonObject.get("member_id").getAsString();
 			Member member = memberDao.findById(Integer.parseInt(member_id));
 			writeText(response, gson.toJson(member));
+		}else if (action.equals("memberInsert") || action.equals("memberUpdate")) {
+			String spotJson = jsonObject.get("member").getAsString();
+			Member member = gson.fromJson(spotJson, Member.class);//轉成Member物件
+			int count = 0;
+			if (action.equals("memberInsert")) {
+				count = memberDao.insert(member);
+			} else if (action.equals("memberUpdate")) {
+				count = memberDao.update(member);
+			}
+			writeText(response, String.valueOf(count));
+		}else if (action.equals("findNewMember")) {
+			Member member = memberDao.findNewMember();
+			writeText(response, gson.toJson(member));
 		}
 	}
 

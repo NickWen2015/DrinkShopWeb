@@ -38,8 +38,7 @@ public class MemberDaoMySqlImpl implements MemberDao {
 			ps.setString(1, member.getMember_account());
 			ps.setString(2, member.getMember_password());
 			ps.setString(3, member.getMember_name());
-//			ps.setDate(4, (Date) Helper.getFmtStrToDate(member.getMember_birthday()));
-			ps.setDate(4, (Date) Helper.validDate(null));
+			ps.setDate(4, Date.valueOf(member.getMember_birthday()));
 			ps.setString(5, member.getMember_sex());
 			ps.setString(6, member.getMember_mobile());
 			ps.setString(7, member.getMember_email());
@@ -77,13 +76,12 @@ public class MemberDaoMySqlImpl implements MemberDao {
 			ps = connection.prepareStatement(sql);
 			ps.setString(1, member.getMember_password());
 			ps.setString(2, member.getMember_name());
-			//ps.setDate(3, (Date) Helper.getFmtStrToDate(member.getMember_birthday()));
-			ps.setDate(3, (Date) Helper.validDate(null));
+			ps.setDate(3, Date.valueOf(member.getMember_birthday()));
 			ps.setString(4, member.getMember_sex());
 			ps.setString(5, member.getMember_mobile());
 			ps.setString(6, member.getMember_email());
 			ps.setString(7, member.getMember_address());
-			ps.setInt(7, member.getMember_id());
+			ps.setInt(8, member.getMember_id());
 			count = ps.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -196,7 +194,7 @@ public class MemberDaoMySqlImpl implements MemberDao {
 				String member_account = rs.getString(2);
 				String member_password = rs.getString(3);
 				String member_name = rs.getString(4);
-				String member_birthday = Helper.getFmtDateTimeToStr(rs.getDate(5));
+				String member_birthday = Helper.getFmtdDateToStr(rs.getDate(5));
 				String member_sex = rs.getString(6);
 				String member_mobile = rs.getString(7);
 				String member_email = rs.getString(8);
@@ -292,5 +290,48 @@ public class MemberDaoMySqlImpl implements MemberDao {
 			}
 		}
 		return isAvalible;
+	}
+	
+	@Override
+	public Member findNewMember() {
+		String sql = "SELECT member_id, member_account, member_password, member_name, member_birthday, member_sex, member_mobile, member_email, member_address, member_status FROM member ORDER BY member_id DESC LIMIT 1 ;"; 
+				
+		Connection conn = null;
+		PreparedStatement ps = null;
+		Member member = null;
+		try {
+			conn = DriverManager.getConnection(Common.URL, Common.USER,
+					Common.PASSWORD);
+			ps = conn.prepareStatement(sql);
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				int member_id= rs.getInt(1);
+				String member_account = rs.getString(2);
+				String member_password = rs.getString(3);
+				String member_name = rs.getString(4);
+				String member_birthday = Helper.getFmtdDateToStr(rs.getDate(5));
+				String member_sex = rs.getString(6);
+				String member_mobile = rs.getString(7);
+				String member_email = rs.getString(8);
+				String member_address = rs.getString(9);
+				String member_status = rs.getString(10);
+				
+				member = new Member(member_id, member_account, member_password, member_name, member_birthday, member_sex, member_mobile, member_email, member_address, member_status);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (ps != null) {
+					ps.close();
+				}
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return member;
 	}
 }

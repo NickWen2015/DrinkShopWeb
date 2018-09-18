@@ -7,7 +7,9 @@ public interface MemberDao {
 	int update(Member member);
 	int delete(int member_id);
 	Member findById(int member_id);
+	Member findNewMember();
 	List<Member> getAll();
 	boolean isMemberValid(String member_account, String member_password);
 	Member findMemberByAccountAndPassword(String member_account, String member_password);
+	
 }
