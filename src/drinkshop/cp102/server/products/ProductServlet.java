@@ -47,7 +47,7 @@ public class ProductServlet extends HttpServlet {
 		List<Product> products = null;
 		switch (action) {
 		case "getAllProduct":
-			 products = productDao.getAllProduct();
+			products = productDao.getAllProduct();
 			writeText(response, gson.toJson(products));
 			break;
 			
