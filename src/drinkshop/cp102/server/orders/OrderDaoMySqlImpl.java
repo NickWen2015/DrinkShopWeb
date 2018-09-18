@@ -41,7 +41,7 @@ public class OrderDaoMySqlImpl implements OrderDao {
 	}
 
 	@Override
-	public int insert(int store_id, int member_id, int coupon_id, String order_type, List<ShoppingCart> cart) {
+	public int insert(int store_id, int member_id, int coupon_id, String order_type, List<Order> cart) {
 		Connection conn = null;
 		PreparedStatement psMaster = null;
 		PreparedStatement psDetail = null;
@@ -70,7 +70,7 @@ public class OrderDaoMySqlImpl implements OrderDao {
 			if (rs.next()) {
 				orderId = rs.getInt(1);
 			}
-			for (ShoppingCart shoppingCart : cart) {
+			for (Order shoppingCart : cart) {
 				int productId = shoppingCart.getProductID();
 				int size = shoppingCart.getSize();
 				int suger = shoppingCart.getSuger();

@@ -52,9 +52,9 @@ public class OrdersServlet extends HttpServlet {
 			int coupon_id = jsonObject.get("coupon_id").getAsInt();
 			String order_type = jsonObject.get("order_type").getAsString();
 			String shoppingCartList = jsonObject.get("shoppingCartList").getAsString();
-			Type listType = new TypeToken<List<ShoppingCart>>() {
+			Type listType = new TypeToken<List<Order>>() {
 			}.getType();
-			List<ShoppingCart> cart = gson.fromJson(shoppingCartList, listType);
+			List<Order> cart = gson.fromJson(shoppingCartList, listType);
 			int orderId = orderDAO.insert(store_id, member_id, coupon_id, order_type, cart);
 			Order order = null;
 			if (orderId != -1) {
