@@ -116,7 +116,7 @@ public class OrderDaoMySqlImpl implements OrderDao {
 	}
 
 	@Override
-	public List<Order> findOrderByMemberId(int member_id) {
+	public List<Order> findOrderHistoryByMemberId(int member_id) {
 		Connection conn = null;
 		PreparedStatement ps = null;
 		List<Order> orderList = new ArrayList<>();

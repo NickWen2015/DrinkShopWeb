@@ -12,5 +12,5 @@ public interface OrderDao {
 	Order findById(int id);
 	
 	//撈訂單歷史紀錄 
-	List<Order> findOrderByMemberId(int member_id);
+	List<Order> findOrderHistoryByMemberId(int member_id);
 }

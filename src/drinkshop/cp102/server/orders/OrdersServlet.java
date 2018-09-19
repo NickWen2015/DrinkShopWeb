@@ -75,7 +75,7 @@ public class OrdersServlet extends HttpServlet {
 		if (orderDao == null) {
 			orderDao = new OrderDaoMySqlImpl();
 		}
-		List<Order> orderList = orderDao.findOrderByMemberId(1);
+		List<Order> orderList = orderDao.findOrderHistoryByMemberId(1);
 		writeText(response, new Gson().toJson(orderList));
 	}
 	
