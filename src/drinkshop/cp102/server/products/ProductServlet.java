@@ -117,7 +117,7 @@ public class ProductServlet extends HttpServlet {
 		response.setContentType(CONTENT_TYPE);
 		PrintWriter out = response.getWriter();
 		out.print(outText);
-		System.out.println("output: " + outText);
+		LogHelper.showOutput(outText);
 	}
 
 }

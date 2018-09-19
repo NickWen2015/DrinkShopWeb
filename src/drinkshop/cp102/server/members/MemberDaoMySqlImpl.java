@@ -136,7 +136,8 @@ public class MemberDaoMySqlImpl implements MemberDao {
 
 	@Override
 	public Member findById(int member_id) {
-		String sql = "SELECT member_account, member_password, member_name, member_birthday, member_sex, member_mobile, member_email, member_address, member_status FROM member WHERE member_id = ?;";
+		String sql = "SELECT member_account, member_password, member_name, member_birthday, member_sex, member_mobile, member_email, member_address, member_status"
+				+ " FROM member WHERE member_id = ?;";
 		Connection conn = null;
 		PreparedStatement ps = null;
 		Member member = null;

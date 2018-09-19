@@ -1,3 +1,4 @@
+
 package drinkshop.cp102.server.main;
 
 public class Common {
