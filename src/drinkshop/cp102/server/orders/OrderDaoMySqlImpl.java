@@ -130,8 +130,7 @@ public class OrderDaoMySqlImpl implements OrderDao {
 					+ "cp.coupon_discount, "
 					+ "p.product_name, i.ice_name, s.sugar_name, sz.size_name, od.product_quantity, ps.product_price, "
 					+ "o.store_id, o.delivery_id, o.coupon_id, od.order_detail_id, p.product_id, "
-					+ "sz.size_id, s.sugar_id, i.ice_id, "
-					+ "o.invoice_prefix, o.invoice_no, o.order_status "
+					+ "sz.size_id, s.sugar_id, i.ice_id, " + "o.invoice_prefix, o.invoice_no, o.order_status "
 					+ "from order_detail as od  " + "left join `order` as o " + "on od.order_id = o.order_id "
 					+ "left join product as p " + "on od.product_id = p.product_id  " + "left join ice as i "
 					+ "on od.ice_id = i.ice_id " + "left join sugar as s " + "on od.sugar_id = s.sugar_id  "
@@ -174,11 +173,12 @@ public class OrderDaoMySqlImpl implements OrderDao {
 				String invoice_prefix = rs.getString(27);
 				String invoice_no = rs.getString(28);
 				String order_status = rs.getString(29);
-				
-				OrderDetail orderDetail = new OrderDetail(order_detail_id, order_id, product_id,size_id,sugar_id,ice_id,product_quantity,product_name, ice_name, sugar_name, size_name,
-						product_price);
+
+				OrderDetail orderDetail = new OrderDetail(order_detail_id, order_id, product_id, size_id, sugar_id,
+						ice_id, product_quantity, product_name, ice_name, sugar_name, size_name, product_price);
 				orderDetailList.add(orderDetail);
-				Order order = new Order(order_id, invoice_prefix, invoice_no,store_id,member_id,order_accept_time, order_finish_time, order_type, delivery_id,coupon_id, order_status,invoice, store_name,
+				Order order = new Order(order_id, invoice_prefix, invoice_no, store_id, member_id, order_accept_time,
+						order_finish_time, order_type, delivery_id, coupon_id, order_status, invoice, store_name,
 						store_telephone, store_mobile, store_address, store_location_x, store_location_y,
 						coupon_discount, orderDetailList);
 				int index = orderList.indexOf(order);// 會透過equals比較
