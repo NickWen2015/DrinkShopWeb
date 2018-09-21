@@ -63,8 +63,11 @@ public class OrdersServlet extends HttpServlet {
 			}
 			writeText(response, gson.toJson(orderId));
 			break;
-			
-			
+		case "findOrderHistoryByMemberId":
+			int memberId = jsonObject.get("member_id").getAsInt();
+			List<Order> orders = orderDao.findOrderHistoryByMemberId(memberId);
+			writeText(response, gson.toJson(orders));
+			break;
 		default:
 			writeText(response, "");
 			break;
@@ -75,8 +78,8 @@ public class OrdersServlet extends HttpServlet {
 		if (orderDao == null) {
 			orderDao = new OrderDaoMySqlImpl();
 		}
-		List<Order> orderList = orderDao.findOrderHistoryByMemberId(1);
-		writeText(response, new Gson().toJson(orderList));
+		List<Order> orders = orderDao.findOrderHistoryByMemberId(1);
+		writeText(response, new Gson().toJson(orders));
 	}
 	
 	private void writeText(HttpServletResponse response, String outText) throws IOException {

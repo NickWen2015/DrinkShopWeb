@@ -121,6 +121,7 @@ public class OrderDaoMySqlImpl implements OrderDao {
 		PreparedStatement ps = null;
 		List<Order> orderList = new ArrayList<>();
 		List<OrderDetail> orderDetailList = new ArrayList<>();
+		List<Order> orderNewList = new ArrayList<>();
 		try {
 			conn = DriverManager.getConnection(Common.URL, Common.USER, Common.PASSWORD);
 			String sql;
@@ -139,6 +140,7 @@ public class OrderDaoMySqlImpl implements OrderDao {
 					+ "on od.size_id = sz.size_id  " + "left join store as st  " + "on o.store_id = st.store_id "
 					+ "left join coupon as cp " + "on o.coupon_id = cp.coupon_id "
 					+ "where o.member_id = ? and o.order_status = 1 " + "order by o.order_accept_time DESC;";
+			System.out.println(sql);
 			ps = conn.prepareStatement(sql);
 			ps.setInt(1, member_id);
 
@@ -177,16 +179,31 @@ public class OrderDaoMySqlImpl implements OrderDao {
 				OrderDetail orderDetail = new OrderDetail(order_detail_id, order_id, product_id, size_id, sugar_id,
 						ice_id, product_quantity, product_name, ice_name, sugar_name, size_name, product_price);
 				orderDetailList.add(orderDetail);
+
 				Order order = new Order(order_id, invoice_prefix, invoice_no, store_id, member_id, order_accept_time,
 						order_finish_time, order_type, delivery_id, coupon_id, order_status, invoice, store_name,
 						store_telephone, store_mobile, store_address, store_location_x, store_location_y,
 						coupon_discount, orderDetailList);
-				int index = orderList.indexOf(order);// 會透過equals比較
-				if (index == -1) {
+
+				int orderIndex = orderList.indexOf(order);// 會透過equals比較,order_id要不同的才加進去orderList
+				if (orderIndex == -1) {
 					orderList.add(order);
 				}
-
 			}
+			List<OrderDetail> orderDetailNewList = null;
+			//整理多筆要回傳的orderList內容
+			for (int k = 0; k < orderList.size(); k++) {
+				Order order = orderList.get(k);
+				orderDetailNewList = new ArrayList<>();
+				for (int i = 0; i < orderDetailList.size(); i++) {
+					if (order.getOrder_id() == orderDetailList.get(i).getOrder_id()) {
+						orderDetailNewList.add(orderDetailList.get(i));
+					}
+				}
+				order.setOrderDetailList(orderDetailNewList);
+				orderNewList.add(order);
+			}
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -201,7 +218,7 @@ public class OrderDaoMySqlImpl implements OrderDao {
 				e.printStackTrace();
 			}
 		}
-		return orderList;
+		return orderNewList;
 	}
 
 }
