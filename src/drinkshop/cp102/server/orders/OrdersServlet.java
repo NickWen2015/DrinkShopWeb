@@ -17,10 +17,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
 import drinkshop.cp102.server.main.LogHelper;
-import drinkshop.cp102.server.members.Member;
-import drinkshop.cp102.server.members.MemberDaoMySqlImpl;
-import drinkshop.cp102.server.products.Product;
-
 
 @SuppressWarnings("serial")
 @WebServlet("/OrdersServlet")
@@ -45,32 +41,24 @@ public class OrdersServlet extends HttpServlet {
 		}
 		String action = jsonObject.get("action").getAsString();
 		/* --- 我是分隔線 --- */
-		List<Product> products = null;
-		switch (action) {
-		case "orderInsert":
-			int store_id = jsonObject.get("store_id").getAsInt();
-			int member_id = jsonObject.get("member_id").getAsInt();
-			int coupon_id = jsonObject.get("coupon_id").getAsInt();
-			String order_type = jsonObject.get("order_type").getAsString();
-			String shoppingCartList = jsonObject.get("shoppingCartList").getAsString();
-			Type listType = new TypeToken<List<Order>>() {
+		
+		if(action.equals("orderInsert")) {
+			String OrderD = jsonObject.get("order").getAsString();
+			Type OrderType = new TypeToken<Order>() {
 			}.getType();
-			List<Order> cart = gson.fromJson(shoppingCartList, listType);
-			int orderId = orderDao.insert(store_id, member_id, coupon_id, order_type, cart);
-			Order order = null;
-			if (orderId != -1) {
-				order = orderDao.findById(orderId);
-			}
-			writeText(response, gson.toJson(orderId));
-			break;
-		case "findOrderHistoryByMemberId":
-			int memberId = jsonObject.get("member_id").getAsInt();
-			List<Order> orders = orderDao.findOrderHistoryByMemberId(memberId);
-			writeText(response, gson.toJson(orders));
-			break;
-		default:
+			Order Order = gson.fromJson(OrderD, OrderType);
+			String orderDetailList = jsonObject.get("orderDetailList").getAsString();
+			Type orderDetailListType = new TypeToken<List<OrderDetail>>() {
+			}.getType();
+			List<OrderDetail> orderDetails = gson.fromJson(orderDetailList, orderDetailListType);
+			int orderId = orderDao.insert(Order, orderDetails);
+			writeText(response, gson.toJson(String.valueOf(orderId)));
+		} else if(action.equals("findOrderByOrderId")) {
+			String foboiOrderId = jsonObject.get("orderId").getAsString();
+			List<Order> foboiOrder = orderDao.findOrderByOrderId(Integer.valueOf(foboiOrderId));
+			writeText(response, gson.toJson(foboiOrder));
+		} else {
 			writeText(response, "");
-			break;
 		}
 	}
 	
