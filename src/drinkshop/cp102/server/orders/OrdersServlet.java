@@ -18,6 +18,7 @@ import com.google.gson.reflect.TypeToken;
 
 import drinkshop.cp102.server.main.LogHelper;
 
+
 @SuppressWarnings("serial")
 @WebServlet("/OrdersServlet")
 public class OrdersServlet extends HttpServlet {
@@ -41,7 +42,7 @@ public class OrdersServlet extends HttpServlet {
 		}
 		String action = jsonObject.get("action").getAsString();
 		/* --- 我是分隔線 --- */
-		
+
 		if(action.equals("orderInsert")) {
 			String OrderD = jsonObject.get("order").getAsString();
 			Type OrderType = new TypeToken<Order>() {
@@ -57,7 +58,10 @@ public class OrdersServlet extends HttpServlet {
 			String foboiOrderId = jsonObject.get("orderId").getAsString();
 			List<Order> foboiOrder = orderDao.findOrderByOrderId(Integer.valueOf(foboiOrderId));
 			writeText(response, gson.toJson(foboiOrder));
-		} else {
+		} else if (action.equals("getAllOrder")){
+			List<Order> order = orderDao.getAllOrder();
+			writeText(response, gson.toJson(order));
+		} else  {
 			writeText(response, "");
 		}
 	}
@@ -66,6 +70,7 @@ public class OrdersServlet extends HttpServlet {
 		if (orderDao == null) {
 			orderDao = new OrderDaoMySqlImpl();
 		}
+
 		List<Order> orders = orderDao.findOrderHistoryByMemberId(1);
 		writeText(response, new Gson().toJson(orders));
 	}

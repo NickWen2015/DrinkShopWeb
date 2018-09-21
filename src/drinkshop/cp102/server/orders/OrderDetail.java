@@ -39,16 +39,18 @@ public class OrderDetail {
 		this.product_price = product_price;
 	}
 
-	public OrderDetail(int order_id, String product_name, String ice_name, String sugar_name, String size_name, int product_quantity, int product_price) {
+	public OrderDetail(int order_id, String product_name, String ice_name, String sugar_name, String size_name, int product_price,int product_quantity) {
         this.order_id = order_id;
         this.product_name = product_name;
         this.ice_name = ice_name;
         this.sugar_name = sugar_name;
         this.size_name = size_name;
+        this.product_price = product_price;
         this.product_quantity = product_quantity;
-		this.product_price = product_price;
+		
     }
-
+	
+	
     public int getOrder_detail_id() {
         return order_detail_id;
     }

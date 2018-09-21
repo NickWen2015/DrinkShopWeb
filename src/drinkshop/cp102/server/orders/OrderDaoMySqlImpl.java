@@ -11,6 +11,9 @@ import java.util.List;
 
 import drinkshop.cp102.server.main.Common;
 import drinkshop.cp102.server.main.Helper;
+import drinkshop.cp102.server.members.Member;
+import drinkshop.cp102.server.orders.OrderDetail;
+
 
 public class OrderDaoMySqlImpl implements OrderDao {
 
@@ -22,7 +25,7 @@ public class OrderDaoMySqlImpl implements OrderDao {
 			e.printStackTrace();
 		}
 	}
-
+	
 	/**
 	 * 新增訂單
 	 * @author mrosstro
@@ -94,12 +97,6 @@ public class OrderDaoMySqlImpl implements OrderDao {
 			}
 		}
 		return orderId;
-	}
-
-	@Override
-	public int update(Order spot, byte[] image) {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 
 	@Override
@@ -204,7 +201,7 @@ public class OrderDaoMySqlImpl implements OrderDao {
 		}
 		return orderList;
 	}
-
+    
 	@Override
 	public List<Order> findOrderHistoryByMemberId(int member_id) {
 		Connection conn = null;
@@ -310,5 +307,194 @@ public class OrderDaoMySqlImpl implements OrderDao {
 		}
 		return orderNewList;
 	}
+	
+	/**
+	 * 當使用者給店家掃描QRCode後 執行
+	 * 修改 order（訂單）order_status 狀態 0：未付款 1：已付款
+	 * 
+	 * @author linpeko
+	 * @param order_id 訂單編號
+	 * @param order_status 訂單狀態
+	 * */
+	@Override
+	public int update(int order_id, String order_status) {
+		String sql = "UPDATE `order` " + 
+				"SET order_status = ? " + 
+				"WHERE order_id = ?;";
+		
+		Connection conn = null;
+		PreparedStatement ps = null;
+		
+		int changeOK = 0;
+		try {
+			conn = DriverManager.getConnection(Common.URL, Common.USER,
+					Common.PASSWORD);
+			conn.setAutoCommit(false);
+			
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, order_status);
+			ps.setInt(2, order_id);
+			
+			changeOK = ps.executeUpdate();  //如果成功會傳回參數
+			System.out.println("changeOK = " + changeOK);
+			
+			conn.commit();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (ps != null) {
+					ps.close();
+				}
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return changeOK;
+	}
 
+	/**
+	 * 取得全部訂單資訊
+	 * 
+	 * @author linpeko
+	 * */
+    public List<Order> getAllOrder() {
+	String sql = "SELECT " + 
+			"o.order_id, " + 
+			"CONCAT(o.invoice_prefix, '-', o.invoice_no) As invoice, " + 
+			"m.member_name, " + 
+			"o.order_accept_time, " + 
+			"o.order_status " + 
+			"FROM `order` AS o " + 
+			"LEFT JOIN member AS m " + 
+			"ON m.member_id = o.member_id " + 
+			"WHERE o.order_status = 0 ORDER BY o.order_accept_time DESC;";
+
+	Connection conn = null;
+	PreparedStatement ps = null;
+	
+	List<Order> orders = new ArrayList<>();  //所有的訂單
+	try {
+		conn = DriverManager.getConnection(Common.URL, Common.USER,
+				Common.PASSWORD);
+		ps = conn.prepareStatement(sql);
+		ResultSet rs = ps.executeQuery();
+		
+		if (rs.next()) {
+			int order_id = rs.getInt(1);
+			String invoice = rs.getString(2);
+			String member_name = rs.getString(3);
+			String order_accept_time = rs.getString(4);
+			String order_status = rs.getString(5);
+			
+			Order order = new Order();
+			order.setOrder_id(order_id);
+			order.setInvoice(invoice);
+			order.setMember_name(member_name);
+			order.setOrder_status(order_status);
+			
+			orders.add(order);
+		}
+		return orders;
+	} catch (SQLException e) {
+		e.printStackTrace();
+	} finally {
+		try {
+			if (ps != null) {
+				ps.close();
+			}
+			if (conn != null) {
+				conn.close();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	return orders;
+}
+
+    /**
+     * 取得訂單詳細
+     * 
+	 * @author linpeko
+	 * */
+	@Override
+	public List<OrderDetail> findOrderDetailByOrderId(int order_id) {
+		String sql = "SELECT " + 
+				"p.product_name, " + 
+				"i.ice_name, " + 
+				"s.sugar_name, " + 
+				"sz.size_name, " + 
+				"ps.product_price, " + 
+				"od.product_quantity " + 
+				"FROM order_detail AS od " + 
+				"LEFT JOIN `order` AS o " + 
+				"ON od.order_id = o.order_id " + 
+				"LEFT JOIN product AS p  " + 
+				"ON od.product_id = p.product_id  " + 
+				"LEFT JOIN ice AS i \n" + 
+				"ON od.ice_id = i.ice_id " + 
+				"LEFT JOIN sugar AS s " + 
+				"ON od.sugar_id = s.sugar_id " + 
+				"LEFT JOIN product_size AS ps " + 
+				"ON od.product_id  = ps.product_id  AND od.size_id = ps.size_id " + 
+				"LEFT JOIN size AS sz " + 
+				"ON od.size_id = sz.size_id  " + 
+				"LEFT JOIN store AS st  " + 
+				"ON o.store_id = st.store_id " + 
+				"LEFT JOIN coupon AS cp " + 
+				"ON o.coupon_id = cp.coupon_id " + 
+				"WHERE o.order_id = ? ORDER BY o.order_accept_time DESC;";
+		
+		Connection conn = null;
+		PreparedStatement ps = null;
+		
+		List<Order> orderList = new ArrayList<>();
+		List<OrderDetail> orderDetailList = new ArrayList<>();
+		try {
+			conn = DriverManager.getConnection(Common.URL, Common.USER, Common.PASSWORD);
+
+			ps = conn.prepareStatement(sql);
+			ps.setInt(1, order_id);
+
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				String product_name = rs.getString(2);// 產品名稱
+				String ice_name = rs.getString(3);// 冰塊
+				String sugar_name = rs.getString(4);// 甜度
+				String size_name = rs.getString(5);// size
+				int product_price = rs.getBigDecimal(6) != null ? rs.getBigDecimal(6).intValueExact() : 0;
+				int product_quantity = rs.getInt(7);// 產品數量
+
+				OrderDetail orderDetail = new OrderDetail();			
+				orderDetail.setOrder_id(order_id);
+				orderDetail.setProduct_name(product_name);
+				orderDetail.setIce_name(ice_name);
+				orderDetail.setSugar_name(sugar_name);
+				orderDetail.setSize_name(size_name);
+				orderDetail.setProduct_price(product_price);
+				orderDetail.setProduct_quantity(product_quantity);
+					
+				orderDetailList.add(orderDetail);
+			}
+		return orderDetailList;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (ps != null) {
+					ps.close();
+				}
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return orderDetailList;
+	}
 }

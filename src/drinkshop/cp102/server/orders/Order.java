@@ -13,6 +13,7 @@ public class Order {
 	private String invoice_no;
 	private int store_id;
 	private int member_id;
+	private String member_name;
 	private String order_accept_time;
 	private String order_finish_time;
 	private String order_type;
@@ -29,10 +30,8 @@ public class Order {
 	private String store_location_x;
 	private String store_location_y;
 	private float coupon_discount;
-
-	public Order() {
-		super();
-	}
+		
+	public Order() {}
 
 	public Order(int order_id, String invoice_prefix, String invoice_no, int store_id, int member_id,
 			String order_accept_time, String order_finish_time, String order_type, int delivery_id, int coupon_id,
@@ -81,6 +80,46 @@ public class Order {
 		this.coupon_discount = coupon_discount;
 		this.orderDetailList = orderDetailList;
 	}
+	
+	
+	public Order(int order_id, String invoice, String member_name, String order_accept_time, String order_status) {
+		super();
+		this.order_id = order_id;
+		this.invoice = invoice;
+		this.member_name = member_name;
+		this.order_accept_time = order_accept_time;
+		this.order_status = order_status;
+	}
+	
+	public Order(int order_id, String invoice_prefix, String invoice_no, int store_id, int member_id, String member_name, 
+			String order_accept_time, String order_finish_time, String order_type, int delivery_id, int coupon_id,
+			String order_status, String invoice, String store_name,
+			String store_telephone, String store_mobile, String store_address, String store_location_x,
+			String store_location_y, float coupon_discount, List<OrderDetail> orderDetailList) {
+		super();
+		this.order_id = order_id;
+		this.invoice_prefix = invoice_prefix;
+		this.invoice_no = invoice_no;
+		this.store_id = store_id;
+		this.member_id = member_id;
+		this.member_name = member_name;
+		this.order_accept_time = order_accept_time;
+		this.order_finish_time = order_finish_time;
+		this.order_type = order_type;
+		this.delivery_id = delivery_id;
+		this.coupon_id = coupon_id;
+		this.order_status = order_status;
+		this.invoice = invoice;
+		this.store_name = store_name;
+		this.store_telephone = store_telephone;
+		this.store_mobile = store_mobile;
+		this.store_address = store_address;
+		this.store_location_x = store_location_x;
+		this.store_location_y = store_location_y;
+		this.coupon_discount = coupon_discount;
+		this.orderDetailList = orderDetailList;
+	}
+
 	
 	@Override
     // 要比對欲加入的Order的order_id是否相同，是則值相同
@@ -133,6 +172,14 @@ public class Order {
 
 	public void setMember_id(int member_id) {
 		this.member_id = member_id;
+	}
+	
+	public String getMember_name() {
+		return member_name;
+	}
+
+	public void setMember_name(String member_name) {
+		this.member_name = member_name;
 	}
 
 	public String getOrder_accept_time() {
