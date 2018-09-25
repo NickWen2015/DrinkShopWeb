@@ -86,7 +86,7 @@ public class ProductServlet extends HttpServlet {
 			Product product = gson.fromJson(productJson, Product.class);
 			
 			String imageBase64 = jsonObject.get("imageBase64").getAsString();
-			System.out.println("imageBase64 = " + imageBase64);
+//			System.out.println("imageBase64 = " + imageBase64);
 			byte[] image = Base64.getMimeDecoder().decode(imageBase64);
 			
 			if(action.equals("productInsert")) {

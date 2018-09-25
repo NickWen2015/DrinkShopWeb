@@ -20,7 +20,7 @@ import drinkshop.cp102.server.main.LogHelper;
 
 @SuppressWarnings("serial")
 @WebServlet("/OrdersServlet")
-public class OrdersServlet extends HttpServlet {
+public class OrdersServlet extends HttpServlet  {
 	private final static String CONTENT_TYPE = "text/html; charset=utf-8";
 	OrderDao orderDao = null;
 
