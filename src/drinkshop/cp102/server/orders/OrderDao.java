@@ -21,6 +21,9 @@ public interface OrderDao {
 	//撈訂單歷史紀錄 
 	List<Order> findOrderHistoryByMemberId(int member_id);
 	
+	//撈訂單狀況 
+		List<Order> findOrderByMemberId(int member_id);
+		
 	/**
 	 * 改變訂單狀態（ 1 = 完成 ; 2 = 未完成 ）
 	 *
@@ -63,5 +66,7 @@ public interface OrderDao {
 //	List<OrderDetail> findOrderDetailByOrderId(int order_id);
 	
 //	List<Order> getAllOrder();
+
+	
 
 }
