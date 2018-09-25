@@ -44,23 +44,84 @@ public class ProductServlet extends HttpServlet {
 		}
 		String action = jsonObject.get("action").getAsString();
 		/* --- 我是分隔線 --- */
-		List<Product> products = null;
-		switch (action) {
-		case "getAllProduct":
+		
+		
+		if(action.equals("getAllProduct")) {  //取得全部商品
+			List<Product> products = null;
 			products = productDao.getAllProduct();
 			writeText(response, gson.toJson(products));
-			break;
 			
-		case "getProductDetail":
+		} else if(action.equals("getProductDetail")) {  //取得單一商品詳細
+			List<Product> products = null;
 			int productID = jsonObject.get("productID").getAsInt();
 			products = productDao.getProductDetail(productID);
 			writeText(response, gson.toJson(products));
-			break;
 			
-		default:
+		} else if(action.equals("getImage")) {  //取的單一商品圖片
+			OutputStream os = response.getOutputStream();
+			int id = jsonObject.get("id").getAsInt();
+			int imageSize = jsonObject.get("imageSize").getAsInt();
+			byte[] image = productDao.getProductImage(id);
+			if (image != null) {
+				image = ImageUtil.shrink(image, imageSize);//java縮圖
+				response.setContentType("image/jpeg");//輸出圖
+				response.setContentLength(image.length);//圖的長度
+			}
+			os.write(image);
+			
+		} else if(action.equals("insertCategory")) {
+			int categoryId = 0;
+			String categoryName = jsonObject.get("categoryName").getAsString();
+			categoryId = productDao.insertCategory(categoryName);
+			writeText(response, gson.toJson(categoryId));
+			
+		} else if(action.equals("getAllCategory")) {
+			List<Category> categories = new ArrayList<>();
+			categories = productDao.getAllCategory();
+			writeText(response, gson.toJson(categories));
+			
+		} else if(action.equals("productInsert") || action.equals("productUpdate")) {
+			int count = 0;
+			String productJson = jsonObject.get("product").getAsString();
+			Product product = gson.fromJson(productJson, Product.class);
+			
+			String imageBase64 = jsonObject.get("imageBase64").getAsString();
+			System.out.println("imageBase64 = " + imageBase64);
+			byte[] image = Base64.getMimeDecoder().decode(imageBase64);
+			
+			if(action.equals("productInsert")) {
+				count = productDao.productInsert(product, image);
+			} else if(action.equals("productUpdate")) {
+				count = productDao.productUpdate(product, image);
+			}
+			writeText(response, gson.toJson(count));
+
+		} else if(action.equals("productDelete")) {
+			int count = 0;
+			int productId = jsonObject.get("product_id").getAsInt();
+			count = productDao.productDelete(productId);
+			writeText(response, gson.toJson(count));
+			
+		} else {
 			writeText(response, "");
-			break;
 		}
+		
+//		switch (action) {
+//		case "getAllProduct":
+//			products = productDao.getAllProduct();
+//			writeText(response, gson.toJson(products));
+//			break;
+//			
+//		case "getProductDetail":
+//			int productID = jsonObject.get("productID").getAsInt();
+//			products = productDao.getProductDetail(productID);
+//			writeText(response, gson.toJson(products));
+//			break;
+//			
+//		default:
+//			writeText(response, "");
+//			break;
+//		}
 	
 
 //		if (action.equals("getAll")) {

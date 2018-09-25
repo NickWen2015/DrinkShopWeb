@@ -59,6 +59,7 @@ public class NewsServlet extends HttpServlet {
 		if(action.equals("getNews_activity_id")) {
 			List<News> mynews = newsDao.getNews_activity_id();
 			writeText(response, gson.toJson(mynews)); 
+			
 		} else if(action.equals("getNewsImage")) {
 			int activity_id = jsonObject.get("activity_id").getAsInt();
 			int imageSize = jsonObject.get("imageSize").getAsInt();
@@ -70,9 +71,11 @@ public class NewsServlet extends HttpServlet {
 				response.setContentLength(image.length); //圖的長度
 			}
 			os.write(image); //輸出
+			
 		} else if (action.equals("getAllNews")) {   //拿到資料轉成JSON Object
 			List<News> mynews = newsDao.getAllNews();
 			writeText(response, gson.toJson(mynews)); 
+			
 		} else if (action.equals("getImage")) {
 			OutputStream os = response.getOutputStream();
 			int id = jsonObject.get("id").getAsInt();
@@ -84,6 +87,7 @@ public class NewsServlet extends HttpServlet {
 				response.setContentLength(image.length); //圖的長度
 			}
 			os.write(image); //輸出
+			
 		} else if (action.equals("newsInsert") || action.equals("newsUpdate")) {  
 			String newsJson = jsonObject.get("news").getAsString();  //JSON字串裡面有JSON字串
 			News news = gson.fromJson(newsJson, News.class);  //解析成news物件

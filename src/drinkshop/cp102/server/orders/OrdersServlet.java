@@ -54,14 +54,27 @@ public class OrdersServlet extends HttpServlet {
 			List<OrderDetail> orderDetails = gson.fromJson(orderDetailList, orderDetailListType);
 			int orderId = orderDao.insert(Order, orderDetails);
 			writeText(response, gson.toJson(String.valueOf(orderId)));
+			
 		} else if(action.equals("findOrderByOrderId")) {
 			String foboiOrderId = jsonObject.get("orderId").getAsString();
 			List<Order> foboiOrder = orderDao.findOrderByOrderId(Integer.valueOf(foboiOrderId));
 			writeText(response, gson.toJson(foboiOrder));
+			
 		} else if (action.equals("getAllOrder")){
 			List<Order> order = orderDao.getAllOrder();
 			writeText(response, gson.toJson(order));
-		} else  {
+			   
+		} else if(action.equals("getOrderDetailByOrderId")) {
+			int OrderId = jsonObject.get("orderId").getAsInt();
+			List<OrderDetail> order = orderDao.getOrderDetailByOrderId(OrderId);
+			writeText(response, gson.toJson(order));
+		} else if(action.equals("changeOrderStatusByOrderId")) {
+			int OrderId = jsonObject.get("orderId").getAsInt();
+			String orderStatus = jsonObject.get("orderStatus").getAsString();
+			String order = orderDao.changeOrderStatusByOrderId(OrderId, orderStatus);
+			writeText(response, gson.toJson(order));
+		
+		} else {
 			writeText(response, "");
 		}
 	}

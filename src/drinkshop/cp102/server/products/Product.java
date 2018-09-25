@@ -1,18 +1,21 @@
 package drinkshop.cp102.server.products;
 
+
 /**
  * 商品
  * @author mrosstro
- * @date 2018/8/29
  * */
 public class Product {
-    private long id;
+    private int id;
+    private int categoryId;
     private String Category;
     private String Name;
     private int MPrice;
     private int LPrice;
 
-    public Product(long id, String category, String name, int MPrice, int LPrice) {
+    public Product() { }
+
+    public Product(int id, String category, String name, int MPrice, int LPrice) {
         this.id = id;
         Category = category;
         Name = name;
@@ -20,12 +23,20 @@ public class Product {
         this.LPrice = LPrice;
     }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
+    }
+
+    public int getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
     }
 
     public String getCategory() {
