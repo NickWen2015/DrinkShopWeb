@@ -102,6 +102,7 @@ public class NewsServlet extends HttpServlet {
 				count = newsDao.update(news, image);
 			}
 			writeText(response, String.valueOf(count));
+			
 		}  else if (action.equals("newsDelete")) {
 			String newsJson = jsonObject.get("news").getAsString();
 			News news = gson.fromJson(newsJson, News.class);

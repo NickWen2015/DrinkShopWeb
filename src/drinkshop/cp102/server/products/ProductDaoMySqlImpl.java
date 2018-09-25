@@ -193,8 +193,8 @@ public class ProductDaoMySqlImpl implements ProductDao {
 				"WHERE product_id = ?;";
 		
 		String sqlProduct_size = "UPDATE product_size " + 
-				"SET size_id = ?, product_price = ? " + 
-				"WHERE product_id = ?;";
+				"SET product_price = ? " + 
+				"WHERE size_id = ? AND product_id = ?;";
 		
 		Connection conn = null;
 		PreparedStatement psProduct = null;
@@ -215,14 +215,18 @@ public class ProductDaoMySqlImpl implements ProductDao {
 			
 			for(int size = 1; size <= 2 ; size++) {
 				psProduct_size = conn.prepareStatement(sqlProduct_size);
-				psProduct_size.setInt(1, size);
+				
 				if(size == 1) {
-					psProduct_size.setInt(2, product.getMPrice());	
+					psProduct_size.setInt(1, product.getMPrice());
+					psProduct_size.setInt(2, size);	
 				} else if(size == 2) {
-					psProduct_size.setInt(2, product.getLPrice());
+					psProduct_size.setInt(1, product.getLPrice());
+					psProduct_size.setInt(2, size);
 				}
 				psProduct_size.setInt(3, product.getId());
+				psProduct_size.executeUpdate();  //如果成功會傳回參數
 			}
+			
 			changeOK = 1;
 			conn.commit();
 		} catch (SQLException e) {
