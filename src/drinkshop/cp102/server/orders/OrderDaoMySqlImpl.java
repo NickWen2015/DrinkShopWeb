@@ -362,20 +362,20 @@ public class OrderDaoMySqlImpl implements OrderDao {
 	  * @author linpeko
 	  * */
 	 @Override
-	    public List<Order> getAllOrder() {
-	 String sql = "SELECT " + 
-	   "o.order_id, " + 
-	   "CONCAT(o.invoice_prefix, '-', o.invoice_no) As invoice, " + 
-	   "m.member_name, " + 
-	   "o.order_accept_time, " + 
-	   "o.order_status " + 
-	   "FROM `order` AS o " + 
-	   "LEFT JOIN member AS m " + 
-	   "ON m.member_id = o.member_id " + 
-	   "WHERE o.order_status = 0 ORDER BY o.order_accept_time DESC;";
+	 public List<Order> getAllOrder() {
+		 String sql = "SELECT " + 
+				 "o.order_id, " + 
+				 "CONCAT(o.invoice_prefix, '-', o.invoice_no) As invoice, " + 
+				 "m.member_name, " + 
+				 "o.order_accept_time, " + 
+				 "o.order_status " + 
+				 "FROM `order` AS o " + 
+				 "LEFT JOIN member AS m " + 
+				 "ON m.member_id = o.member_id " + 
+				 "WHERE o.order_status = 0 ORDER BY o.order_accept_time DESC;";
 
-	 Connection conn = null;
-	 PreparedStatement ps = null;
+		 Connection conn = null;
+		 PreparedStatement ps = null;
 	 
 	 List<Order> orders = new ArrayList<>();  //所有的訂單
 	 try {
@@ -384,38 +384,39 @@ public class OrderDaoMySqlImpl implements OrderDao {
 	  ps = conn.prepareStatement(sql);
 	  ResultSet rs = ps.executeQuery();
 	  
-	  if (rs.next()) {
-	   int order_id = rs.getInt(1);
-	   String invoice = rs.getString(2);
-	   String member_name = rs.getString(3);
-	   String order_accept_time = rs.getString(4);
-	   String order_status = rs.getString(5);
+	  while (rs.next()) {
+		  int order_id = rs.getInt(1);
+		  String invoice = rs.getString(2);
+		  String member_name = rs.getString(3);
+		  String order_accept_time = rs.getString(4);
+		  String order_status = rs.getString(5);
 	   
-	   Order order = new Order();
-	   order.setOrder_id(order_id);
-	   order.setInvoice(invoice);
-	   order.setMember_name(member_name);
-	   order.setOrder_accept_time(order_accept_time);
-	   order.setOrder_status(order_status);
-	   
-	   orders.add(order);
+		  Order order = new Order();
+		  order.setOrder_id(order_id);
+		  order.setInvoice(invoice);		
+		  order.setMember_name(member_name);
+		  order.setOrder_accept_time(order_accept_time);
+		  order.setOrder_status(order_status);
+		  
+		  orders.add(order);
 	  }
+	  
 	  return orders;
 	 } catch (SQLException e) {
-	  e.printStackTrace();
+		 e.printStackTrace();
 	 } finally {
-	  try {
-	   if (ps != null) {
-	    ps.close();
-	   }
-	   if (conn != null) {
-	    conn.close();
-	   }
+		 try {
+			 if (ps != null) {
+				 ps.close();
+			 }
+			 if (conn != null) {
+				 conn.close();
+			 }
 	  } catch (SQLException e) {
-	   e.printStackTrace();
-	  }
+		  e.printStackTrace();
+	  	}
 	 }
-	 return orders;
+	 	return orders;
 	}
 
 	    /**
@@ -437,7 +438,7 @@ public class OrderDaoMySqlImpl implements OrderDao {
 	    "ON od.order_id = o.order_id " + 
 	    "LEFT JOIN product AS p  " + 
 	    "ON od.product_id = p.product_id  " + 
-	    "LEFT JOIN ice AS i \n" + 
+	    "LEFT JOIN ice AS i " + 
 	    "ON od.ice_id = i.ice_id " + 
 	    "LEFT JOIN sugar AS s " + 
 	    "ON od.sugar_id = s.sugar_id " + 
@@ -496,7 +497,7 @@ public class OrderDaoMySqlImpl implements OrderDao {
 	   } catch (SQLException e) {
 	    e.printStackTrace();
 	   }
-	  }
+	  } 
 	  return orderDetailList;
 	 }
 	

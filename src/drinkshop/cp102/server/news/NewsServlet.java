@@ -72,7 +72,6 @@ public class NewsServlet extends HttpServlet {
 
 		} else if (action.equals("getAllNews")) { // 拿到資料轉成JSON Object
 			List<News> mynews = newsDao.getAllNews();
-
 			writeText(response, gson.toJson(mynews));
 
 		} else if (action.equals("getImage")) {
