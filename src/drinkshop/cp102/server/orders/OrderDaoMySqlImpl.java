@@ -20,7 +20,7 @@ public class OrderDaoMySqlImpl implements OrderDao {
 	public OrderDaoMySqlImpl() {
 		super();
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("org.mariadb.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}

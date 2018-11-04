@@ -17,7 +17,7 @@ public class NewsDaoMySqlImpl implements NewsDao {
 		public NewsDaoMySqlImpl() {
 			super();
 			try {
-				Class.forName("com.mysql.jdbc.Driver");
+				Class.forName("org.mariadb.jdbc.Driver");
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
 			}

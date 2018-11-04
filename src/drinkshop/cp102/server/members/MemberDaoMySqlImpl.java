@@ -17,7 +17,7 @@ public class MemberDaoMySqlImpl implements MemberDao {
 	public MemberDaoMySqlImpl() {
 		super();
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("org.mariadb.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}

@@ -17,8 +17,8 @@ public class ProductDaoMySqlImpl implements ProductDao {
 
 	public ProductDaoMySqlImpl() {
 		super();
-		try {
-			Class.forName("com.mysql.jdbc.Driver");
+		try { // org.mariadb.jdbc.Driver
+			Class.forName("org.mariadb.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
