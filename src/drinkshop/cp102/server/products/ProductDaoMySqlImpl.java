@@ -248,6 +248,49 @@ public class ProductDaoMySqlImpl implements ProductDao {
 		}
 		return changeOK;
 	}
+	
+	/**
+	 * 更新商品版次
+	 * */
+	@Override
+	public int productsVersionsUpdate() {
+		int changeOK = 0;
+		
+		String sqlProduct = "UPDATE productsVersions " + 
+				"SET versions = versions + 1 " + 
+				"WHERE productsVersions_id = 1;";
+		
+		Connection conn = null;
+		PreparedStatement psProductsVersions = null;
+				
+		try {
+			conn = DriverManager.getConnection(Common.URL, Common.USER,
+					Common.PASSWORD);
+			conn.setAutoCommit(false);
+			
+			psProductsVersions = conn.prepareStatement(sqlProduct);
+			
+			psProductsVersions.executeUpdate();  
+			
+			changeOK = 1;
+			conn.commit();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				
+				if (psProductsVersions != null) {
+					psProductsVersions.close();
+				}
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return changeOK;
+	}
 
 	/**
 	 * 刪除商品

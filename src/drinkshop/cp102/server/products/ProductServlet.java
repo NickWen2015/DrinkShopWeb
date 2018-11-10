@@ -96,6 +96,11 @@ public class ProductServlet extends HttpServlet {
 			}
 			writeText(response, gson.toJson(count));
 
+		} else if(action.equals("productsVersionsUpdate")) {//更新產品版次
+			int count = 0;			
+			count = productDao.productsVersionsUpdate();
+			writeText(response, gson.toJson(count));
+
 		} else if(action.equals("productDelete")) {
 			int count = 0;
 			int productId = jsonObject.get("product_id").getAsInt();
