@@ -251,6 +251,9 @@ public class ProductDaoMySqlImpl implements ProductDao {
 	
 	/**
 	 * 更新商品版次
+	 * 2018/11/10
+	 * @author Nick
+	 * @return 1(success) or 0(failure)
 	 * */
 	@Override
 	public int productsVersionsUpdate() {
