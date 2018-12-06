@@ -62,6 +62,7 @@ public class ProductServlet extends HttpServlet {
 			int id = jsonObject.get("id").getAsInt();
 			int imageSize = jsonObject.get("imageSize").getAsInt();
 			byte[] image = productDao.getProductImage(id);
+			
 			if (image != null) {
 				image = ImageUtil.shrink(image, imageSize);//java縮圖
 				response.setContentType("image/jpeg");//輸出圖
@@ -107,6 +108,12 @@ public class ProductServlet extends HttpServlet {
 			count = productDao.productDelete(productId);
 			writeText(response, gson.toJson(count));
 			
+		} else if(action.equals("getProductsVersions")) {//更新產品版次
+			int version = 0;
+			int lastVersion = jsonObject.get("lastVersion").getAsInt();
+			version = productDao.getProductsVersions(lastVersion);
+			writeText(response, gson.toJson(version));
+
 		} else {
 			writeText(response, "");
 		}

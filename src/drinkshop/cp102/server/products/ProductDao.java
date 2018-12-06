@@ -12,6 +12,8 @@ public interface ProductDao {
 
 	int productUpdate(Product product, byte[] image);
 	
+	int getProductsVersions(int version);
+	
 	int productsVersionsUpdate();//更新產品版次
 
 	int productDelete(int product_id);

@@ -517,6 +517,43 @@ public class ProductDaoMySqlImpl implements ProductDao {
 		}
 		return productList;
 	}
+	
+	public int getProductsVersions(int version) {
+		int nowVersion = version;
+		String sql = "SELECT " + 
+				"versions " + 
+				"FROM productsVersions " +
+				"WHERE productsVersions_id = 1";
+
+		Connection connection = null;
+		PreparedStatement ps = null;
+
+		try {
+			connection = DriverManager.getConnection(Common.URL, Common.USER,
+					Common.PASSWORD);
+			ps = connection.prepareStatement(sql);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				nowVersion = rs.getInt(1);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (ps != null) {
+					// When a Statement object is closed,
+					// its current ResultSet object is also closed
+					ps.close();
+				}
+				if (connection != null) {
+					connection.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return nowVersion;
+	}
 
 //	@Override
 //	public int insert(Product product, byte[] image) {
