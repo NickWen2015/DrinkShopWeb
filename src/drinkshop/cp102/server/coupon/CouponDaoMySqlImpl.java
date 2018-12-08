@@ -158,7 +158,7 @@ public class CouponDaoMySqlImpl implements CouponDao {
 				String coupon_start = Helper.getFmtdDateToStr(rs.getDate(6));
 				String coupon_end = Helper.getFmtdDateToStr(rs.getDate(7));
 				
-				Coupon coupon = new Coupon(coupon_id, member_id, coupon_no, coupon_end, coupon_status, coupon_start, coupon_discount);
+				Coupon coupon = new Coupon(coupon_id, member_id, coupon_no, coupon_status, coupon_start, coupon_end, coupon_discount);
 				couponList.add(coupon);
 			}
 			return couponList;
@@ -196,7 +196,7 @@ public class CouponDaoMySqlImpl implements CouponDao {
 				String coupon_start = Helper.getFmtdDateToStr(rs.getDate(6));
 				String coupon_end = Helper.getFmtdDateToStr(rs.getDate(7));
 				
-				Coupon coupon = new Coupon(coupon_id, member_id, coupon_no, coupon_end, coupon_status, coupon_start, coupon_discount);
+				Coupon coupon = new Coupon(coupon_id, member_id, coupon_no, coupon_status, coupon_start, coupon_end, coupon_discount);
 				couponList.add(coupon);
 			}
 			return couponList;
