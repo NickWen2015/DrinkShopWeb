@@ -36,6 +36,7 @@ public class OrderDaoMySqlImpl implements OrderDao {
 		PreparedStatement psMaster = null;
 		PreparedStatement psDetail = null;
 		String sqlMaster = "INSERT INTO `order`(store_id, member_id, order_accept_time, order_finish_time, coupon_id, order_type) VALUES(?, ?, now(), now(), ?, ?);";
+//		String sqlMaster = "INSERT INTO `order`(store_id, member_id, order_accept_time, order_finish_time, coupon_id, order_type) VALUES(?, ?, DATE_ADD(NOW(), INTERVAL 13 HOUR), DATE_ADD(NOW(), INTERVAL 13 HOUR), ?, ?);";
 		String sqlDetail = "INSERT INTO order_detail(order_id, product_id, size_id, sugar_id, ice_id, product_quantity) VALUES(?, ?, ?, ?, ?, ?);";
 		int orderId = 0;
 
