@@ -18,4 +18,7 @@ public interface CouponDao {
 
 	//回傳所有Coupon券(0未用,1已用)
     List<Coupon> getAllCoupons(String useStatus);
+    
+    // 回傳會員未使用的Coupon卷(0未用,1已用)
+    List<Coupon> getCouponsByMemberId(int member_id, String useStatus);
 }

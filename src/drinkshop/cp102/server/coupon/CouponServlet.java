@@ -70,6 +70,11 @@ public class CouponServlet extends HttpServlet {
 			int coupon_id = jsonObject.get("coupon_id").getAsInt();
 			Coupon coupon = couponDao.findCouponById(coupon_id);
 			writeText(response, gson.toJson(coupon));
+		} else if(action.equals("getCouponsByMemberId")) {
+			String useStatus = jsonObject.get("status").getAsString();
+			int member_id = jsonObject.get("member_id").getAsInt();
+			List<Coupon> couponList = couponDao.getCouponsByMemberId(member_id, useStatus);
+			writeText(response, gson.toJson(couponList));
 		}
 	}
 

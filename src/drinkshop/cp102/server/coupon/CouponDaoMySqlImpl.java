@@ -212,4 +212,42 @@ public class CouponDaoMySqlImpl implements CouponDao {
 		}
 		return null;
 	}
+
+	@Override
+	public List<Coupon> getCouponsByMemberId(int member_id, String useStatus) {
+		String sql = "SELECT coupon_id, member_id, coupon_no, coupon_discount, coupon_status, coupon_start, coupon_end FROM coupon WHERE coupon_status = ? AND member_id = ? Order By coupon_end DESC;";
+		Connection conn = null;
+		PreparedStatement ps = null;
+		try {
+			conn = DriverManager.getConnection(Common.URL, Common.USER,
+					Common.PASSWORD);
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, useStatus);
+			ps.setInt(2, member_id);
+			ResultSet rs = ps.executeQuery();
+			List<Coupon> couponList = new ArrayList<Coupon>();
+			while (rs.next()) {
+				int coupon_id = rs.getInt(1);
+				String coupon_no = rs.getString(3);
+				float coupon_discount = rs.getBigDecimal(4) != null ? rs.getBigDecimal(4).floatValue() : 10;
+				String coupon_status = rs.getString(5);
+				String coupon_start = Helper.getFmtdDateToStr(rs.getDate(6));
+				String coupon_end = Helper.getFmtdDateToStr(rs.getDate(7));
+				
+				Coupon coupon = new Coupon(coupon_id, member_id, coupon_no, coupon_status, coupon_start, coupon_end, coupon_discount);
+				couponList.add(coupon);
+			}
+			return couponList;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				ps.close();
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return null;
+	}
 }
