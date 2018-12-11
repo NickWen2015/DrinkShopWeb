@@ -92,9 +92,11 @@ public class ProductServlet extends HttpServlet {
 			
 			if(action.equals("productInsert")) {
 				count = productDao.productInsert(product, image);
+				
 			} else if(action.equals("productUpdate")) {
 				count = productDao.productUpdate(product, image);
 			}
+			productDao.productsVersionsUpdate();
 			writeText(response, gson.toJson(count));
 
 		} else if(action.equals("productsVersionsUpdate")) {//更新產品版次
@@ -106,6 +108,7 @@ public class ProductServlet extends HttpServlet {
 			int count = 0;
 			int productId = jsonObject.get("product_id").getAsInt();
 			count = productDao.productDelete(productId);
+			productDao.productsVersionsUpdate();
 			writeText(response, gson.toJson(count));
 			
 		} else if(action.equals("getProductsVersions")) {//更新產品版次
