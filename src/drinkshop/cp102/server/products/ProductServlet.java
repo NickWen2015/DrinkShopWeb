@@ -76,6 +76,7 @@ public class ProductServlet extends HttpServlet {
 			categoryId = productDao.insertCategory(categoryName);
 			writeText(response, gson.toJson(categoryId));
 			
+			
 		} else if(action.equals("getAllCategory")) {
 			List<Category> categories = new ArrayList<>();
 			categories = productDao.getAllCategory();

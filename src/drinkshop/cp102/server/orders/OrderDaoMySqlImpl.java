@@ -369,7 +369,8 @@ public class OrderDaoMySqlImpl implements OrderDao {
 				 "CONCAT(o.invoice_prefix, '-', o.invoice_no) As invoice, " + 
 				 "m.member_name, " + 
 				 "o.order_accept_time, " + 
-				 "o.order_status " + 
+				 "o.order_status, " + 
+				 "o.coupon_id " +
 				 "FROM `order` AS o " + 
 				 "LEFT JOIN member AS m " + 
 				 "ON m.member_id = o.member_id " + 
@@ -391,6 +392,7 @@ public class OrderDaoMySqlImpl implements OrderDao {
 		  String member_name = rs.getString(3);
 		  String order_accept_time = rs.getString(4);
 		  String order_status = rs.getString(5);
+		  int couponId = rs.getInt(6);
 	   
 		  Order order = new Order();
 		  order.setOrder_id(order_id);
@@ -398,6 +400,7 @@ public class OrderDaoMySqlImpl implements OrderDao {
 		  order.setMember_name(member_name);
 		  order.setOrder_accept_time(order_accept_time);
 		  order.setOrder_status(order_status);
+		  order.setCoupon_id(couponId);
 		  
 		  orders.add(order);
 	  }
